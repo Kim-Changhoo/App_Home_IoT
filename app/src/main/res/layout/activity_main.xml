@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.kch.homeiot.MainActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Home IoT"
+        android:textSize="30sp"
+        android:textColor="@android:color/holo_blue_light"
+        android:textStyle="normal|bold"
+        android:gravity="center_horizontal" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:weightSum="30"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:text=""
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/bulbBtn"
+            android:layout_weight="3"
+            android:textOff="꺼짐"
+            android:textOn="켜짐"
+            android:background="@drawable/bulboff"
+            android:forceHasOverlappingRendering="true" />
+
+        <ToggleButton
+            android:text="ToggleButton"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/curtainBtn"
+            android:layout_weight="3"
+            android:textOff="닫힘"
+            android:textOn="열림"
+            android:background="@drawable/drawcurtain"
+            android:layout_marginLeft="50dp" />
+
+        <ToggleButton
+            android:text="ToggleButton"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/doorlockBtn"
+            android:layout_weight="3"
+            android:textOff="잠김"
+            android:textOn="열림"
+            android:background="@drawable/locked"
+            android:layout_marginLeft="50dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:text=""
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/countBtn"
+            android:background="@drawable/human"
+            android:layout_weight="1" />
+
+        <Button
+            android:text=""
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/cctvBtn"
+            android:background="@drawable/cameraoff"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="1" />
+
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/detailedView">
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/resultTemperature"
+            android:layout_weight="1"
+            android:layout_marginTop="40dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:id="@+id/bulbLayer">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ToggleButton
+                    android:text="꺼짐"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:textOff="꺼짐"
+                    android:textOn="켜짐"
+                    android:background="@drawable/bulboff"
+                    android:id="@+id/room1Btn" />
+
+                <ToggleButton
+                    android:text="꺼짐"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:textOff="꺼짐"
+                    android:textOn="켜짐"
+                    android:id="@+id/toggleButton2"
+                    android:background="@drawable/bulboff"
+                    android:visibility="invisible" />
+
+                <ToggleButton
+                    android:text="꺼짐"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:textOff="꺼짐"
+                    android:textOn="켜짐"
+                    android:background="@drawable/bulboff"
+                    android:id="@+id/room2Btn" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ToggleButton
+                    android:text="ToggleButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:textOff="꺼짐"
+                    android:textOn="켜짐"
+                    android:id="@+id/toggleButton7"
+                    android:background="@drawable/bulboff"
+                    android:visibility="invisible" />
+
+                <ToggleButton
+                    android:text="ToggleButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:textOff="꺼짐"
+                    android:textOn="켜짐"
+                    android:background="@drawable/bulboff"
+                    android:id="@+id/livingroomBtn" />
+
+                <ToggleButton
+                    android:text="ToggleButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:textOff="꺼짐"
+                    android:textOn="켜짐"
+                    android:id="@+id/toggleButton4"
+                    android:background="@drawable/bulboff"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ToggleButton
+                    android:text="ToggleButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:textOff="꺼짐"
+                    android:textOn="켜짐"
+                    android:background="@drawable/bulboff"
+                    android:id="@+id/room3Btn" />
+
+                <ToggleButton
+                    android:text="ToggleButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:textOff="꺼짐"
+                    android:textOn="켜짐"
+                    android:id="@+id/toggleButton8"
+                    android:background="@drawable/bulboff"
+                    android:visibility="invisible" />
+
+                <ToggleButton
+                    android:text="ToggleButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:textOff="꺼짐"
+                    android:textOn="켜짐"
+                    android:background="@drawable/bulboff"
+                    android:id="@+id/room4Btn" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/humanCounter"
+            android:layout_marginTop="80dp"
+            android:textSize="24sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <VideoView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/videoView"
+            android:layout_marginTop="30dp"
+            android:visibility="invisible" />
+    </FrameLayout>
+
+</LinearLayout>
