@@ -13,6 +13,9 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.VideoView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     // Server resource
     //String requestUrl = "http://192.168.0.55:8080";
     String requestUrl = "http://192.168.1.48:8080/";
-    SendRequest sendRequest = null;
 
     // Temp for View
     String state =null ;
@@ -85,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
         room4Btn.setOnClickListener(onClickListener);
         livingroomBtn.setOnClickListener(onClickListener);
 
+        //actionView.setVisibility(View.INVISIBLE);
+        bulbLayer.setVisibility(View.INVISIBLE);
+        humancounter.setVisibility(View.INVISIBLE);
+        cctvView.setVisibility(View.INVISIBLE);
+
         // Request Initial Home State
         state = getState();
         resultTest = (TextView)findViewById(R.id.resultTest);
@@ -98,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
 
             switch(workId) {
                 case R.id.bulbBtn:
+                    setState(state);
+                    bulbLayer.setVisibility(View.VISIBLE);
                     break;
                 case R.id.curtainBtn:
                     break;
@@ -111,12 +121,70 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    public void setState(String homeStates){
+        String[] led_states = new String[4];
+        boolean bulb_flag = false;
+        StringBuilder sb = new StringBuilder();
+
+        try{
+            JSONObject json = new JSONObject(homeStates);
+
+            JSONArray led_Array = json.getJSONArray("Led");
+            JSONObject json_led = new JSONObject();
+            for(int i=0; i<led_Array.length(); i++)
+                json_led = led_Array.getJSONObject(i);
+
+            for(int i=0; i<json_led.length(); i++){
+                led_states[i] = json_led.getString("room"+Integer.toString(i+1));
+                sb.append("room"+Integer.toString(i+1) +" : " + led_states[i] +"\n");
+                if(led_states[i].toString().equals("On"))   bulb_flag = true;
+            }
+            if(bulb_flag){
+                bulbBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
+                bulbBtn.setText("On");
+            }
+            else{
+                bulbBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
+                bulbBtn.setText("Off");
+            }
+
+            resultTest.setText(sb.toString());
+
+            room1Btn.setText(led_states[0]);
+            if(room1Btn.getText().toString().equals("On"))
+               room1Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
+            else
+                room1Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
+
+            room2Btn.setText(led_states[1]);
+            if(room2Btn.getText().toString().equals("On"))
+                room2Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
+            else
+                room2Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
+
+            room3Btn.setText(led_states[2]);
+            if(room3Btn.getText().toString().equals("On"))
+                room3Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
+            else
+                room3Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
+
+            room4Btn.setText(led_states[3]);
+            if(room4Btn.getText().toString().equals("On"))
+                room4Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
+            else
+                room4Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
+
+        }catch (Exception e){
+            resultTest.setText("Exception??");
+        }
+    }
+
     public String getState(){
         String tempState = null;
-        sendRequest = new SendRequest() ;
+        RequestTask task = new RequestTask();
         try{
-            tempState = sendRequest.execute("?state").get();
-            RenewState(tempState);
+            tempState = task.execute(requestUrl+"?state").get();
+            //RenewState(tempState);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -124,62 +192,15 @@ public class MainActivity extends AppCompatActivity {
         return tempState ;
     }
 
-    private void setState(View view, String turnningWhat){
-        int target = view.getId();
-        switch(target){
-            case  R.id.bulbBtn:
-                bulbBtn.setText(turnningWhat);
-                if(bulbBtn.getText() == "On")
-                    bulbBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
-                else
-                    bulbBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
-                break;
-            case R.id.curtainBtn:
-                curtainBtn.setText(turnningWhat);
-                if(curtainBtn.getText() == "Draw")
-                    curtainBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.drawcurtain));
-                else
-                    curtainBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.curtain));
-                break;
-            case R.id.doorlockBtn:
-                doorlockBtn.setText(turnningWhat);
-                if(doorlockBtn.getText() == "Lock")
-                    doorlockBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.locked));
-                else
-                    doorlockBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.unlocked));
-                break;
-            case R.id.countBtn:
-                break;
-        }
-    }
-
     public class RequestTask extends AsyncTask<String, Void, String> {
-        URL url ;
-        HttpURLConnection conn ;
-        InputStream in ;
-        String response ;
 
         @Override
         public String doInBackground(String... requestContent){
             HomeIotClient client = new HomeIotClient();
-            String 
-            StringBuilder sb = new StringBuilder();
+            String resource = requestContent[0];
+            String states = client.getState(resource);
 
-            sb.append(requestUrl);
-            sb.append(requestContent[0]);
-            String resource = sb.toString();
-
-            try{
-                url = new URL(resource);
-                conn = (HttpURLConnection) url.openConnection();
-                in = new BufferedInputStream(conn.getInputStream());
-                response = getResponse(in);
-            }catch (IOException e){
-                e.printStackTrace();
-            }finally {
-                conn.disconnect();
-            }
-            return response;
+            return states;
         }
     }
 /*
@@ -211,7 +232,29 @@ public class MainActivity extends AppCompatActivity {
 }
 
 class HomeIotClient {
-    public String getResponse(InputStream is){
+
+    URL url ;
+    HttpURLConnection conn ;
+    InputStream in ;
+    String states ;
+
+    public String getState(String resource){
+        HomeIotClient client = new HomeIotClient();
+
+        try{
+            url = new URL(resource);
+            conn = (HttpURLConnection) url.openConnection();
+            in = new BufferedInputStream(conn.getInputStream());
+            states = getStringFromInputStream(in);
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            conn.disconnect();
+        }
+        return states;
+    }
+
+    public String getStringFromInputStream(InputStream is){
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
         String lines = null;

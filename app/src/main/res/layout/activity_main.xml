@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.kch.homeiot.MainActivity"
+    tools:context="com.example.kch.home_iot_v2.MainActivity"
     android:orientation="vertical">
 
     <TextView
@@ -34,8 +34,8 @@
             android:layout_height="64dp"
             android:id="@+id/bulbBtn"
             android:layout_weight="3"
-            android:textOff="꺼짐"
-            android:textOn="켜짐"
+            android:textOff="Off"
+            android:textOn="On"
             android:background="@drawable/bulboff"
             android:forceHasOverlappingRendering="true" />
 
@@ -45,8 +45,8 @@
             android:layout_height="64dp"
             android:id="@+id/curtainBtn"
             android:layout_weight="3"
-            android:textOff="닫힘"
-            android:textOn="열림"
+            android:textOff="Closed"
+            android:textOn="Opened"
             android:background="@drawable/drawcurtain"
             android:layout_marginLeft="50dp" />
 
@@ -56,8 +56,8 @@
             android:layout_height="64dp"
             android:id="@+id/doorlockBtn"
             android:layout_weight="3"
-            android:textOff="잠김"
-            android:textOn="열림"
+            android:textOff="Locked"
+            android:textOn="Unloked"
             android:background="@drawable/locked"
             android:layout_marginLeft="50dp" />
     </LinearLayout>
@@ -116,32 +116,35 @@
                 android:layout_height="match_parent">
 
                 <ToggleButton
-                    android:text="꺼짐"
+                    android:text="Off"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="꺼짐"
-                    android:textOn="켜짐"
+                    android:textOff="Off"
+                    android:textOn="On"
                     android:background="@drawable/bulboff"
-                    android:id="@+id/room1Btn" />
+                    android:id="@+id/room1Btn"
+                    android:textAllCaps="false" />
 
                 <ToggleButton
-                    android:text="꺼짐"
+                    android:text="Off"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="꺼짐"
-                    android:textOn="켜짐"
+                    android:textOff="Off"
+                    android:textOn="On"
                     android:id="@+id/toggleButton2"
                     android:background="@drawable/bulboff"
+                    android:textAllCaps="false"
                     android:visibility="invisible" />
 
                 <ToggleButton
-                    android:text="꺼짐"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:textOff="꺼짐"
-                    android:textOn="켜짐"
-                    android:background="@drawable/bulboff"
-                    android:id="@+id/room2Btn" />
+                android:text="Off"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:textOff="Off"
+                android:textOn="On"
+                android:background="@drawable/bulboff"
+                android:id="@+id/room2Btn"
+                android:textAllCaps="false" />
             </LinearLayout>
 
             <LinearLayout
@@ -153,30 +156,33 @@
                     android:text="ToggleButton"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="꺼짐"
-                    android:textOn="켜짐"
+                    android:textOff="Off"
+                    android:textOn="On"
                     android:id="@+id/toggleButton7"
                     android:background="@drawable/bulboff"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    android:textAllCaps="false" />
 
                 <ToggleButton
                     android:text="ToggleButton"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="꺼짐"
-                    android:textOn="켜짐"
+                    android:textOff="Off"
+                    android:textOn="On"
                     android:background="@drawable/bulboff"
-                    android:id="@+id/livingroomBtn" />
+                    android:id="@+id/livingroomBtn"
+                    android:textAllCaps="false" />
 
                 <ToggleButton
                     android:text="ToggleButton"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="꺼짐"
-                    android:textOn="켜짐"
+                    android:textOff="Off"
+                    android:textOn="On"
                     android:id="@+id/toggleButton4"
                     android:background="@drawable/bulboff"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    android:textAllCaps="false" />
             </LinearLayout>
 
             <LinearLayout
@@ -188,29 +194,32 @@
                     android:text="ToggleButton"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="꺼짐"
-                    android:textOn="켜짐"
+                    android:textOff="Off"
+                    android:textOn="On"
                     android:background="@drawable/bulboff"
-                    android:id="@+id/room3Btn" />
+                    android:id="@+id/room3Btn"
+                    android:textAllCaps="false" />
 
                 <ToggleButton
                     android:text="ToggleButton"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="꺼짐"
-                    android:textOn="켜짐"
+                    android:textOff="Off"
+                    android:textOn="On"
                     android:id="@+id/toggleButton8"
                     android:background="@drawable/bulboff"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    android:textAllCaps="false" />
 
                 <ToggleButton
                     android:text="ToggleButton"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="꺼짐"
-                    android:textOn="켜짐"
+                    android:textOff="Off"
+                    android:textOn="On"
                     android:background="@drawable/bulboff"
-                    android:id="@+id/room4Btn" />
+                    android:id="@+id/room4Btn"
+                    android:textAllCaps="false" />
             </LinearLayout>
         </LinearLayout>
 
