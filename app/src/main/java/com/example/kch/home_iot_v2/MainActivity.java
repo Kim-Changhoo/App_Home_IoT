@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.VideoView;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,11 +42,13 @@ public class MainActivity extends AppCompatActivity {
     VideoView cctvView;
 
     // Server resource
-    String requestUrl = "http://192.168.0.55:8080";
+    //String requestUrl = "http://192.168.0.55:8080";
+    String requestUrl = "http://192.168.1.48:8080/";
     SendRequest sendRequest = null;
 
     // Temp for View
     String state =null ;
+    TextView resultTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Request Initial Home State
         state = getState();
+        resultTest = (TextView)findViewById(R.id.resultTest);
+        resultTest.setText(state);
     }
 
     View.OnClickListener onClickListener= new View.OnClickListener(){
@@ -110,38 +115,13 @@ public class MainActivity extends AppCompatActivity {
         String tempState = null;
         sendRequest = new SendRequest() ;
         try{
-            tempState = sendRequest.execute("state").get();
+            tempState = sendRequest.execute("?state").get();
             RenewState(tempState);
         }catch (Exception e){
             e.printStackTrace();
         }
 
         return tempState ;
-    }
-
-    private void RenewState(String states){
-
-         String[] device_state = new String[4];
-        int device_num=0;
-
-        StringTokenizer deviceTokenizer = new StringTokenizer(states, "%");
-        while(deviceTokenizer.hasMoreTokens()){
-            device_state[device_num] = deviceTokenizer.nextToken();
-            switch (device_num){
-                case 0:
-                    setState(bulbBtn,device_state[device_num]);
-                    break;
-                case 1:
-                    setState(curtainBtn,device_state[device_num]);
-                    break;
-                case 2:
-                    setState(doorlockBtn,device_state[device_num]);
-                    break;
-                case 3:
-                    setState(thenumberBtn,device_state[device_num]);
-                    break;
-            }
-        }
     }
 
     private void setState(View view, String turnningWhat){
@@ -173,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public class SendRequest extends AsyncTask<String, Void, String> {
+    public class RequestTask extends AsyncTask<String, Void, String> {
         URL url ;
         HttpURLConnection conn ;
         InputStream in ;
@@ -181,16 +161,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public String doInBackground(String... requestContent){
+            HomeIotClient client = new HomeIotClient();
+            String 
             StringBuilder sb = new StringBuilder();
 
             sb.append(requestUrl);
-            sb.append(requestContent);
+            sb.append(requestContent[0]);
             String resource = sb.toString();
 
             try{
                 url = new URL(resource);
                 conn = (HttpURLConnection) url.openConnection();
-                in = conn.getInputStream();
+                in = new BufferedInputStream(conn.getInputStream());
                 response = getResponse(in);
             }catch (IOException e){
                 e.printStackTrace();
@@ -200,11 +182,39 @@ public class MainActivity extends AppCompatActivity {
             return response;
         }
     }
+/*
+    private void RenewState(String states){
 
-    private static String getResponse(InputStream is){
+        String[] device_state = new String[4];
+        int device_num=0;
+
+        StringTokenizer deviceTokenizer = new StringTokenizer(states, "%");
+        while(deviceTokenizer.hasMoreTokens()){
+            device_state[device_num] = deviceTokenizer.nextToken();
+            switch (device_num){
+                case 0:
+                    setState(bulbBtn,device_state[device_num]);
+                    break;
+                case 1:
+                    setState(curtainBtn,device_state[device_num]);
+                    break;
+                case 2:
+                    setState(doorlockBtn,device_state[device_num]);
+                    break;
+                case 3:
+                    setState(thenumberBtn,device_state[device_num]);
+                    break;
+            }
+        }
+    }
+    */
+}
+
+class HomeIotClient {
+    public String getResponse(InputStream is){
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
-        String lines;
+        String lines = null;
 
         try{
             br = new BufferedReader(new InputStreamReader(is));
@@ -223,4 +233,3 @@ public class MainActivity extends AppCompatActivity {
         return sb.toString();
     }
 }
-
