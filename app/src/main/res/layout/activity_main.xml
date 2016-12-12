@@ -29,37 +29,34 @@
         android:layout_gravity="center_horizontal">
 
         <Button
-            android:text=""
+            android:text="Off"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:id="@+id/bulbBtn"
             android:layout_weight="3"
-            android:textOff="Off"
-            android:textOn="On"
             android:background="@drawable/bulboff"
-            android:forceHasOverlappingRendering="true" />
+            android:forceHasOverlappingRendering="true"
+            android:textAllCaps="false" />
 
-        <ToggleButton
-            android:text="ToggleButton"
+        <Button
+            android:text="Opend"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:id="@+id/curtainBtn"
             android:layout_weight="3"
-            android:textOff="Closed"
-            android:textOn="Opened"
             android:background="@drawable/drawcurtain"
-            android:layout_marginLeft="50dp" />
+            android:layout_marginLeft="50dp"
+            android:textAllCaps="false" />
 
-        <ToggleButton
-            android:text="ToggleButton"
+        <Button
+            android:text="Locked"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:id="@+id/doorlockBtn"
             android:layout_weight="3"
-            android:textOff="Locked"
-            android:textOn="Unloked"
             android:background="@drawable/locked"
-            android:layout_marginLeft="50dp" />
+            android:layout_marginLeft="50dp"
+            android:textAllCaps="false" />
     </LinearLayout>
 
     <LinearLayout
@@ -75,7 +72,8 @@
             android:layout_height="64dp"
             android:id="@+id/countBtn"
             android:background="@drawable/human"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textAllCaps="false" />
 
         <Button
             android:text=""
@@ -84,7 +82,8 @@
             android:id="@+id/cctvBtn"
             android:background="@drawable/cameraoff"
             android:layout_marginLeft="50dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textAllCaps="false" />
 
 
     </LinearLayout>
@@ -104,44 +103,39 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:id="@+id/bulbLayer">
+            android:id="@+id/bulbLayer"
+            android:background="@drawable/plans">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <ToggleButton
+                <Button
                     android:text="Off"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="Off"
-                    android:textOn="On"
                     android:background="@drawable/bulboff"
                     android:id="@+id/room1Btn"
                     android:textAllCaps="false" />
 
-                <ToggleButton
+                <Button
                     android:text="Off"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="Off"
-                    android:textOn="On"
                     android:id="@+id/toggleButton2"
                     android:background="@drawable/bulboff"
                     android:textAllCaps="false"
                     android:visibility="invisible" />
 
-                <ToggleButton
+                <Button
                 android:text="Off"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:textOff="Off"
-                android:textOn="On"
                 android:background="@drawable/bulboff"
                 android:id="@+id/room2Btn"
                 android:textAllCaps="false" />
@@ -152,33 +146,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <ToggleButton
-                    android:text="ToggleButton"
+                <Button
+                    android:text=""
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="Off"
-                    android:textOn="On"
                     android:id="@+id/toggleButton7"
                     android:background="@drawable/bulboff"
                     android:visibility="invisible"
                     android:textAllCaps="false" />
 
-                <ToggleButton
-                    android:text="ToggleButton"
+                <Button
+                    android:text=""
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="Off"
-                    android:textOn="On"
                     android:background="@drawable/bulboff"
                     android:id="@+id/livingroomBtn"
                     android:textAllCaps="false" />
 
-                <ToggleButton
-                    android:text="ToggleButton"
+                <Button
+                    android:text=""
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="Off"
-                    android:textOn="On"
                     android:id="@+id/toggleButton4"
                     android:background="@drawable/bulboff"
                     android:visibility="invisible"
@@ -190,33 +178,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <ToggleButton
-                    android:text="ToggleButton"
+                <Button
+                    android:text=""
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="Off"
-                    android:textOn="On"
                     android:background="@drawable/bulboff"
                     android:id="@+id/room3Btn"
                     android:textAllCaps="false" />
 
-                <ToggleButton
-                    android:text="ToggleButton"
+                <Button
+                    android:text=""
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="Off"
-                    android:textOn="On"
                     android:id="@+id/toggleButton8"
                     android:background="@drawable/bulboff"
                     android:visibility="invisible"
                     android:textAllCaps="false" />
 
-                <ToggleButton
-                    android:text="ToggleButton"
+                <Button
+                    android:text=""
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:textOff="Off"
-                    android:textOn="On"
                     android:background="@drawable/bulboff"
                     android:id="@+id/room4Btn"
                     android:textAllCaps="false" />

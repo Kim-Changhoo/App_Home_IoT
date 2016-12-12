@@ -29,25 +29,25 @@ import java.util.StringTokenizer;
 public class MainActivity extends AppCompatActivity {
     // View for Control
     Button bulbBtn;
-    ToggleButton curtainBtn;
-    ToggleButton doorlockBtn;
+    Button curtainBtn;
+    Button doorlockBtn;
     Button thenumberBtn;
     Button cctvBtn;
 
     // View for Action
     FrameLayout actionView;
     LinearLayout bulbLayer;
-    ToggleButton room1Btn;
-    ToggleButton room2Btn;
-    ToggleButton room3Btn;
-    ToggleButton room4Btn;
-    ToggleButton livingroomBtn;
+    Button room1Btn;
+    Button room2Btn;
+    Button room3Btn;
+    Button room4Btn;
+    Button livingroomBtn;
     TextView humancounter;
     VideoView cctvView;
 
     // Server resource
-    //String requestUrl = "http://192.168.0.55:8080";
-    String requestUrl = "http://192.168.1.48:8080/";
+    String requestUrl = "http://192.168.0.55:8080";
+    //String requestUrl = "http://192.168.1.48:8080/";
 
     // Temp for View
     String state =null ;
@@ -60,18 +60,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize View
         bulbBtn = (Button)findViewById(R.id.bulbBtn);
-        curtainBtn = (ToggleButton)findViewById(R.id.curtainBtn);
-        doorlockBtn = (ToggleButton)findViewById(R.id.doorlockBtn);
+        curtainBtn = (Button)findViewById(R.id.curtainBtn);
+        doorlockBtn = (Button)findViewById(R.id.doorlockBtn);
         thenumberBtn = (Button)findViewById(R.id.countBtn);
         cctvBtn = (Button)findViewById(R.id.cctvBtn);
 
         actionView = (FrameLayout)findViewById(R.id.detailedView);
         bulbLayer = (LinearLayout)findViewById(R.id.bulbLayer);
-        room1Btn = (ToggleButton)findViewById(R.id.room1Btn);
-        room2Btn = (ToggleButton)findViewById(R.id.room2Btn);
-        room3Btn = (ToggleButton)findViewById(R.id.room3Btn);
-        room4Btn = (ToggleButton)findViewById(R.id.room4Btn);
-        livingroomBtn = (ToggleButton)findViewById(R.id.livingroomBtn);
+        room1Btn = (Button)findViewById(R.id.room1Btn);
+        room2Btn = (Button)findViewById(R.id.room2Btn);
+        room3Btn = (Button)findViewById(R.id.room3Btn);
+        room4Btn = (Button)findViewById(R.id.room4Btn);
+        livingroomBtn = (Button)findViewById(R.id.livingroomBtn);
         humancounter = (TextView)findViewById(R.id.humanCounter);
         cctvView = (VideoView)findViewById(R.id.videoView);
 
@@ -106,39 +106,101 @@ public class MainActivity extends AppCompatActivity {
 
             switch(workId) {
                 case R.id.bulbBtn:
-                    setState(state);
+                    setLedstate(state);
                     bulbLayer.setVisibility(View.VISIBLE);
+                    humancounter.setVisibility(View.GONE);
+                    cctvView.setVisibility(View.GONE);
                     break;
                 case R.id.curtainBtn:
+                    setCurtainstate(state);
                     break;
                 case R.id.doorlockBtn:
+                    setDoorlockstate(state);
                     break;
                 case R.id.countBtn:
+                    bulbLayer.setVisibility(View.GONE);
+                    humancounter.setVisibility(View.VISIBLE);
+                    cctvView.setVisibility(View.GONE);
                     break;
                 case R.id.cctvBtn:
+                    bulbLayer.setVisibility(View.GONE);
+                    humancounter.setVisibility(View.GONE);
+                    cctvView.setVisibility(View.VISIBLE);
                     break;
             }
         }
     };
 
+    public String RequestControl(String instruction){
+
+        return null;
+    }
+
     public void setState(String homeStates){
-        String[] led_states = new String[4];
+        try{
+            //JSONObject json = new JSONObject(homeStates);
+            setLedstate(homeStates);
+            setCurtainstate(homeStates);
+        }catch (Exception e){
+
+        }
+    }
+
+    public String setDoorlockstate(String deviceJsonObject){
+        try{
+            JSONObject json = new JSONObject(deviceJsonObject);
+            String doorlockState = json.getString("Doorlock");
+            Button doorlock = ((Button)findViewById(R.id.doorlockBtn));
+            doorlock.setText(doorlockState);
+            if (doorlock.getText().toString().equals("Locked"))
+                doorlock.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.locked));
+            else
+                doorlock.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.unlocked));
+        }catch (Exception e){
+        }
+
+        return null;
+    }
+
+    public String setCurtainstate(String deviceJsonObject){
+
+        try{
+            JSONObject json = new JSONObject(deviceJsonObject);
+            String curtainState = json.getString("Curtain");
+            Button curtain = ((Button)findViewById(R.id.curtainBtn));
+            curtain.setText(curtainState);
+            if (curtain.getText().toString().equals("Closed"))
+                curtain.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.curtain));
+            else
+                curtain.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.drawcurtain));
+        }catch (Exception e){
+        }
+
+        return null;
+    }
+
+    public String setLedstate(String deviceJsonObject){
+
+        String[] led_states = new String[5];
         boolean bulb_flag = false;
         StringBuilder sb = new StringBuilder();
 
         try{
-            JSONObject json = new JSONObject(homeStates);
-
+            JSONObject json = new JSONObject(deviceJsonObject);
             JSONArray led_Array = json.getJSONArray("Led");
             JSONObject json_led = new JSONObject();
             for(int i=0; i<led_Array.length(); i++)
                 json_led = led_Array.getJSONObject(i);
 
-            for(int i=0; i<json_led.length(); i++){
+            for(int i=0; i<(json_led.length()-1); i++){
                 led_states[i] = json_led.getString("room"+Integer.toString(i+1));
                 sb.append("room"+Integer.toString(i+1) +" : " + led_states[i] +"\n");
                 if(led_states[i].toString().equals("On"))   bulb_flag = true;
             }
+            led_states[4] = json_led.getString("livingroom");
+            sb.append("livingroom : " +led_states[4] +"\n");
+            if(led_states[4].toString().equals("On"))   bulb_flag = true;
+
             if(bulb_flag){
                 bulbBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
                 bulbBtn.setText("On");
@@ -152,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
             room1Btn.setText(led_states[0]);
             if(room1Btn.getText().toString().equals("On"))
-               room1Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
+                room1Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
             else
                 room1Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
 
@@ -174,9 +236,15 @@ public class MainActivity extends AppCompatActivity {
             else
                 room4Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
 
+            livingroomBtn.setText(led_states[4]);
+            if(livingroomBtn.getText().toString().equals("On"))
+                livingroomBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
+            else
+                livingroomBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
         }catch (Exception e){
             resultTest.setText("Exception??");
         }
+        return null;
     }
 
     public String getState(){
@@ -203,32 +271,6 @@ public class MainActivity extends AppCompatActivity {
             return states;
         }
     }
-/*
-    private void RenewState(String states){
-
-        String[] device_state = new String[4];
-        int device_num=0;
-
-        StringTokenizer deviceTokenizer = new StringTokenizer(states, "%");
-        while(deviceTokenizer.hasMoreTokens()){
-            device_state[device_num] = deviceTokenizer.nextToken();
-            switch (device_num){
-                case 0:
-                    setState(bulbBtn,device_state[device_num]);
-                    break;
-                case 1:
-                    setState(curtainBtn,device_state[device_num]);
-                    break;
-                case 2:
-                    setState(doorlockBtn,device_state[device_num]);
-                    break;
-                case 3:
-                    setState(thenumberBtn,device_state[device_num]);
-                    break;
-            }
-        }
-    }
-    */
 }
 
 class HomeIotClient {
