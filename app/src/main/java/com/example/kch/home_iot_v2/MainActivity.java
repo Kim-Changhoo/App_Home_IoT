@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
     VideoView cctvView;
 
     // Server resource
-    String requestUrl = "http://192.168.0.55:8080";
-    //String requestUrl = "http://192.168.1.48:8080/";
+    //String requestUrl = "http://192.168.0.55:8080";
+    String requestUrl = "http://192.168.1.26:8080/";
 
     // Temp for View
     String state =null ;
@@ -103,26 +103,32 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View view){
             int workId = view.getId();
+            String result = null;
 
             switch(workId) {
                 case R.id.bulbBtn:
-                    setLedstate(state);
+                    result = RequestDeviceControl("Led","On");
+                    setLedstate(result);
                     bulbLayer.setVisibility(View.VISIBLE);
                     humancounter.setVisibility(View.GONE);
                     cctvView.setVisibility(View.GONE);
                     break;
                 case R.id.curtainBtn:
-                    setCurtainstate(state);
+                    result = RequestDeviceControl("Curtain","Close");
+                    setCurtainstate(result);
                     break;
                 case R.id.doorlockBtn:
-                    setDoorlockstate(state);
+                    result = RequestDeviceControl("Doorlock","Unlock");
+                    setDoorlockstate(result);
                     break;
                 case R.id.countBtn:
+                    result = RequestDeviceControl("Count","View");
                     bulbLayer.setVisibility(View.GONE);
                     humancounter.setVisibility(View.VISIBLE);
                     cctvView.setVisibility(View.GONE);
                     break;
                 case R.id.cctvBtn:
+                    result = RequestDeviceControl("Cctv","View");
                     bulbLayer.setVisibility(View.GONE);
                     humancounter.setVisibility(View.GONE);
                     cctvView.setVisibility(View.VISIBLE);
@@ -131,9 +137,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public String RequestControl(String instruction){
+    public String RequestDeviceControl(String device, String instruction){
 
-        return null;
+        String response = null;
+        RequestTask task = new RequestTask();
+        try{
+            response = task.execute(requestUrl +"?" +device +"=" +instruction).get();
+        }catch (Exception e){}
+
+        return response;
     }
 
     public void setState(String homeStates){
