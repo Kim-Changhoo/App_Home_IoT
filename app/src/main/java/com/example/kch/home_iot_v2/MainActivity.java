@@ -27,6 +27,28 @@ import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String LED = "led";
+    public static final String ROOM1 = "led1";
+    public static final String ROOM2 = "led2";
+    public static final String ROOM3 = "led3";
+    public static final String ROOM4 = "led4";
+    public static final String CURTAIN = "curtain";
+    public static final String DOORLOCK = "doorlock";
+
+    public static final String CONTROL_BULB_ON = "on";
+    public static final String CONTROL_BULB_OFF = "off";
+    public static final String CONTROL_CURTAIN_OPEN = "open";
+    public static final String CONTROL_CURTAIN_CLOSE = "close";
+    public static final String CONTROL_DOORLOCK_LOCK = "lock";
+    public static final String CONTROL_DOORLOCK_UNLOCK = "unlock";
+
+    public static final String STATE_BULB_ON = "on";
+    public static final String STATE_BULB_OFF = "off";
+    public static final String STATE_CURTAIN_OPEND = "opend";
+    public static final String STATE_CURTAIN_CLOSED = "closed";
+    public static final String STATE_DOORLOCK_LOCK = "locked";
+    public static final String STATE_DOORLOCK_UNLOCK = "unlocked";
+
     // View for Control
     Button bulbBtn;
     Button curtainBtn;
@@ -46,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
     VideoView cctvView;
 
     // Server resource
-    //String requestUrl = "http://192.168.0.55:8080";
-    String requestUrl = "http://192.168.1.26:8080/";
+    //String requestUrl = "http://192.168.0.55:8080/";
+    //String requestUrl = "http://192.168.1.26:8080/";
+    //String requestUrl = "http://222.112.247.133:7000/";
+    String requestUrl = "http://192.168.1.37:8080/";
 
     // Temp for View
     String state =null ;
@@ -95,8 +119,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Request Initial Home State
         state = getState();
-        resultTest = (TextView)findViewById(R.id.resultTest);
+        resultTest = (TextView) findViewById(R.id.resultTest);
         resultTest.setText(state);
+        setState(state);
     }
 
     View.OnClickListener onClickListener= new View.OnClickListener(){
@@ -107,28 +132,60 @@ public class MainActivity extends AppCompatActivity {
 
             switch(workId) {
                 case R.id.bulbBtn:
-                    result = RequestDeviceControl("Led","On");
-                    setLedstate(result);
                     bulbLayer.setVisibility(View.VISIBLE);
                     humancounter.setVisibility(View.GONE);
                     cctvView.setVisibility(View.GONE);
                     break;
+                case R.id.room1Btn:
+                    if(room1Btn.getText().toString().equals(STATE_BULB_OFF))
+                        result = RequestDeviceControl(ROOM1, CONTROL_BULB_ON);
+                    else
+                        result = RequestDeviceControl(ROOM1, CONTROL_BULB_OFF);
+                    setLedstate(result);
+                    break;
+                case R.id.room2Btn:
+                    if(room1Btn.getText().toString().equals(STATE_BULB_OFF))
+                        result = RequestDeviceControl(ROOM2, CONTROL_BULB_ON);
+                    else
+                        result = RequestDeviceControl(ROOM2, CONTROL_BULB_OFF);
+                    setLedstate(result);
+                    break;
+                case R.id.room3Btn:
+                    if(room1Btn.getText().toString().equals(STATE_BULB_OFF))
+                        result = RequestDeviceControl(ROOM3, CONTROL_BULB_ON);
+                    else
+                        result = RequestDeviceControl(ROOM3, CONTROL_BULB_OFF);
+                    setLedstate(result);
+                    break;
+                case R.id.room4Btn:
+                    if(room1Btn.getText().toString().equals(STATE_BULB_OFF))
+                        result = RequestDeviceControl(ROOM4, CONTROL_BULB_ON);
+                    else
+                        result = RequestDeviceControl(ROOM4, CONTROL_BULB_OFF);
+                    setLedstate(result);
+                    break;
                 case R.id.curtainBtn:
-                    result = RequestDeviceControl("Curtain","Close");
+                    if(curtainBtn.getText().toString().equals(STATE_CURTAIN_CLOSED))
+                        result = RequestDeviceControl(CURTAIN,CONTROL_CURTAIN_OPEN);
+                    else
+                        result = RequestDeviceControl(CURTAIN,CONTROL_CURTAIN_CLOSE);
                     setCurtainstate(result);
                     break;
                 case R.id.doorlockBtn:
-                    result = RequestDeviceControl("Doorlock","Unlock");
+                    if(doorlockBtn.getText().toString().equals(STATE_DOORLOCK_LOCK))
+                        result = RequestDeviceControl(DOORLOCK,CONTROL_DOORLOCK_UNLOCK);
+                    else
+                        result = RequestDeviceControl(DOORLOCK,CONTROL_DOORLOCK_LOCK);
                     setDoorlockstate(result);
                     break;
                 case R.id.countBtn:
-                    result = RequestDeviceControl("Count","View");
+                    result = RequestDeviceControl("count","view");
                     bulbLayer.setVisibility(View.GONE);
                     humancounter.setVisibility(View.VISIBLE);
                     cctvView.setVisibility(View.GONE);
                     break;
                 case R.id.cctvBtn:
-                    result = RequestDeviceControl("Cctv","View");
+                    result = RequestDeviceControl("cctv","view");
                     bulbLayer.setVisibility(View.GONE);
                     humancounter.setVisibility(View.GONE);
                     cctvView.setVisibility(View.VISIBLE);
@@ -142,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         String response = null;
         RequestTask task = new RequestTask();
         try{
-            response = task.execute(requestUrl +"?" +device +"=" +instruction).get();
+            response = task.execute((requestUrl +device +"=" +instruction).toString()).get();
         }catch (Exception e){}
 
         return response;
@@ -154,17 +211,16 @@ public class MainActivity extends AppCompatActivity {
             setLedstate(homeStates);
             setCurtainstate(homeStates);
         }catch (Exception e){
-
         }
     }
 
     public String setDoorlockstate(String deviceJsonObject){
         try{
             JSONObject json = new JSONObject(deviceJsonObject);
-            String doorlockState = json.getString("Doorlock");
+            String doorlockState = json.getString(DOORLOCK);
             Button doorlock = ((Button)findViewById(R.id.doorlockBtn));
             doorlock.setText(doorlockState);
-            if (doorlock.getText().toString().equals("Locked"))
+            if (doorlock.getText().toString().equals(STATE_DOORLOCK_LOCK))
                 doorlock.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.locked));
             else
                 doorlock.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.unlocked));
@@ -178,10 +234,10 @@ public class MainActivity extends AppCompatActivity {
 
         try{
             JSONObject json = new JSONObject(deviceJsonObject);
-            String curtainState = json.getString("Curtain");
+            String curtainState = json.getString(CURTAIN);
             Button curtain = ((Button)findViewById(R.id.curtainBtn));
             curtain.setText(curtainState);
-            if (curtain.getText().toString().equals("Closed"))
+            if (curtain.getText().toString().equals(STATE_CURTAIN_OPEND))
                 curtain.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.curtain));
             else
                 curtain.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.drawcurtain));
@@ -193,66 +249,69 @@ public class MainActivity extends AppCompatActivity {
 
     public String setLedstate(String deviceJsonObject){
 
-        String[] led_states = new String[5];
+        String[] led_states = new String[4];
         boolean bulb_flag = false;
         StringBuilder sb = new StringBuilder();
 
         try{
+            // LED JSON Array -> Object 추출
             JSONObject json = new JSONObject(deviceJsonObject);
-            JSONArray led_Array = json.getJSONArray("Led");
+            JSONArray led_Array = json.getJSONArray(LED);
             JSONObject json_led = new JSONObject();
             for(int i=0; i<led_Array.length(); i++)
                 json_led = led_Array.getJSONObject(i);
 
-            for(int i=0; i<(json_led.length()-1); i++){
-                led_states[i] = json_led.getString("room"+Integer.toString(i+1));
+            // LED 상태 저장
+            for(int i=0; i<(json_led.length()); i++){
+                led_states[i] = json_led.getString("led"+Integer.toString(i+1));
                 sb.append("room"+Integer.toString(i+1) +" : " + led_states[i] +"\n");
-                if(led_states[i].toString().equals("On"))   bulb_flag = true;
+                if(led_states[i].toString().equals(STATE_BULB_ON))   bulb_flag = true;
             }
-            led_states[4] = json_led.getString("livingroom");
+            /*led_states[4] = json_led.getString("livingroom");
             sb.append("livingroom : " +led_states[4] +"\n");
-            if(led_states[4].toString().equals("On"))   bulb_flag = true;
+            if(led_states[4].toString().equals("On"))   bulb_flag = true;*/
+            resultTest.setText(sb.toString());
 
+            // LED 전체 버튼 Background 바꾸기
             if(bulb_flag){
                 bulbBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
-                bulbBtn.setText("On");
+                bulbBtn.setText(STATE_BULB_ON);
             }
             else{
                 bulbBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
-                bulbBtn.setText("Off");
+                bulbBtn.setText(STATE_BULB_OFF);
             }
 
-            resultTest.setText(sb.toString());
-
+            // 각 방의 LED 상태 반영.
             room1Btn.setText(led_states[0]);
-            if(room1Btn.getText().toString().equals("On"))
+            if(room1Btn.getText().toString().equals(STATE_BULB_ON))
                 room1Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
             else
                 room1Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
 
             room2Btn.setText(led_states[1]);
-            if(room2Btn.getText().toString().equals("On"))
+            if(room2Btn.getText().toString().equals(STATE_BULB_ON))
                 room2Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
             else
                 room2Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
 
             room3Btn.setText(led_states[2]);
-            if(room3Btn.getText().toString().equals("On"))
+            if(room3Btn.getText().toString().equals(STATE_BULB_ON))
                 room3Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
             else
                 room3Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
 
             room4Btn.setText(led_states[3]);
-            if(room4Btn.getText().toString().equals("On"))
+            if(room4Btn.getText().toString().equals(STATE_BULB_ON))
                 room4Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
             else
                 room4Btn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
 
-            livingroomBtn.setText(led_states[4]);
+           /* livingroomBtn.setText(led_states[4]);
             if(livingroomBtn.getText().toString().equals("On"))
                 livingroomBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulb));
             else
-                livingroomBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));
+                livingroomBtn.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.bulboff));*/
         }catch (Exception e){
             resultTest.setText("Exception??");
         }
@@ -263,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
         String tempState = null;
         RequestTask task = new RequestTask();
         try{
-            tempState = task.execute(requestUrl+"?state").get();
+            tempState = task.execute(requestUrl+"state").get();
             //RenewState(tempState);
         }catch (Exception e){
             e.printStackTrace();
@@ -295,18 +354,18 @@ class HomeIotClient {
     public String getState(String resource){
         HomeIotClient client = new HomeIotClient();
 
-        try{
-            url = new URL(resource);
-            conn = (HttpURLConnection) url.openConnection();
-            in = new BufferedInputStream(conn.getInputStream());
-            states = getStringFromInputStream(in);
-        }catch (IOException e){
-            e.printStackTrace();
-        }finally {
-            conn.disconnect();
-        }
-        return states;
+    try{
+        url = new URL(resource);
+        conn = (HttpURLConnection) url.openConnection();
+        in = new BufferedInputStream(conn.getInputStream());
+        states = getStringFromInputStream(in);
+    }catch (IOException e){
+        e.printStackTrace();
+    }finally {
+        conn.disconnect();
     }
+    return states;
+}
 
     public String getStringFromInputStream(InputStream is){
         BufferedReader br = null;
