@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String ROOM4 = "led4";
     public static final String CURTAIN = "curtain";
     public static final String DOORLOCK = "doorlock";
+    public static final String SECURITY = "security";
 
     public static final String CONTROL_BULB_ON = "on";
     public static final String CONTROL_BULB_OFF = "off";
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String CONTROL_CURTAIN_CLOSE = "close";
     public static final String CONTROL_DOORLOCK_LOCK = "lock";
     public static final String CONTROL_DOORLOCK_UNLOCK = "unlock";
+    public static final String CONTROL_SECURITY_ON = "on";
+    public static final String CONTROL_SECURITY_OFF = "off";
 
     public static final String STATE_BULB_ON = "on";
     public static final String STATE_BULB_OFF = "off";
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String STATE_CURTAIN_CLOSED = "closed";
     public static final String STATE_DOORLOCK_LOCK = "locked";
     public static final String STATE_DOORLOCK_UNLOCK = "unlocked";
+    public static final String STATE_SECURITY_ON = "on";
+    public static final String STATE_SECURITY_OFF = "off";
 
     // View for Control
     Button bulbBtn;
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     Button doorlockBtn;
     Button thenumberBtn;
     Button cctvBtn;
+    Button securityBtn;
 
     // View for Action
     FrameLayout actionView;
@@ -88,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         doorlockBtn = (Button)findViewById(R.id.doorlockBtn);
         thenumberBtn = (Button)findViewById(R.id.countBtn);
         cctvBtn = (Button)findViewById(R.id.cctvBtn);
+        securityBtn = (Button)findViewById(R.id.securityBtn);
 
         actionView = (FrameLayout)findViewById(R.id.detailedView);
         bulbLayer = (LinearLayout)findViewById(R.id.bulbLayer);
@@ -190,6 +197,13 @@ public class MainActivity extends AppCompatActivity {
                     humancounter.setVisibility(View.GONE);
                     cctvView.setVisibility(View.VISIBLE);
                     break;
+                case R.id.securityBtn:
+                    if(securityBtn.getText().toString().equals(STATE_SECURITY_OFF))
+                        result = RequestDeviceControl(SECURITY, CONTROL_SECURITY_ON);
+                    else
+                        result = RequestDeviceControl(SECURITY, CONTROL_SECURITY_OFF);
+                    setSecuritystate(result);
+                    break;
             }
         }
     };
@@ -210,8 +224,26 @@ public class MainActivity extends AppCompatActivity {
             //JSONObject json = new JSONObject(homeStates);
             setLedstate(homeStates);
             setCurtainstate(homeStates);
+            setDoorlockstate(homeStates);
+            setSecuritystate(homeStates);
         }catch (Exception e){
         }
+    }
+
+    public String setSecuritystate(String deviceJsonObject){
+        try{
+            JSONObject json = new JSONObject(deviceJsonObject);
+            String securityState = json.getString(SECURITY);
+            Button security = ((Button)findViewById(R.id.securityBtn));
+            security.setText(securityState);
+            if (security.getText().toString().equals(STATE_SECURITY_OFF))
+                security.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.unshieldpic));
+            else
+                security.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.shieldpic));
+        }catch (Exception e){
+        }
+
+        return null;
     }
 
     public String setDoorlockstate(String deviceJsonObject){

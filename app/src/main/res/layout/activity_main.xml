@@ -36,7 +36,8 @@
             android:layout_weight="3"
             android:background="@drawable/bulboff"
             android:forceHasOverlappingRendering="true"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:elevation="13dp"/>
 
         <Button
             android:text="Opend"
@@ -84,6 +85,17 @@
             android:layout_marginLeft="50dp"
             android:layout_weight="1"
             android:textAllCaps="false" />
+
+        <Button
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/securityBtn"
+            android:layout_weight="1"
+            android:background="@drawable/unshieldpic"
+            android:layout_marginLeft="50dp"
+            android:elevation="13dp"
+            android:autoText="false"
+            android:textIsSelectable="false" />
 
 
     </LinearLayout>
